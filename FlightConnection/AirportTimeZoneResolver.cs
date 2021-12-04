@@ -18,7 +18,7 @@ namespace FlightConnection
 
                 foreach (IRow row in Enumerable.Range(1, sheet.LastRowNum).Select(index => sheet.GetRow(index))
                                                                                                                .TakeWhile(row => row != null && row.Count() == 2)) {
-                    var airport = (Airport)row.GetCell(0).StringCellValue;
+                    var airport = FlightScheduleFieldResolver.ResolveAirport(row.GetCell(0));
                     var coordinate = new Coordinate(row.GetCell(1).StringCellValue);
 
                     if (!coordinates.ContainsKey(airport)) {

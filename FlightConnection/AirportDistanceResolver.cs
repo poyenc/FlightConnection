@@ -17,8 +17,8 @@ namespace FlightConnection
 
                 foreach (IRow row in Enumerable.Range(1, sheet.LastRowNum).Select(index => sheet.GetRow(index))
                                                                                                                .TakeWhile(row => row != null && row.Count() == 3)) {
-                    var from = (Airport)row.GetCell(0).StringCellValue;
-                    var to = (Airport)row.GetCell(1).StringCellValue;
+                    var from = FlightScheduleFieldResolver.ResolveAirport(row.GetCell(0));
+                    var to = FlightScheduleFieldResolver.ResolveAirport(row.GetCell(1));
                     var distance = (Distance)Convert.ToInt32(row.GetCell(2).NumericCellValue);
 
                     var key = GetKey(from, to);

@@ -13,24 +13,24 @@ namespace FlightConnection
                 throw new ArgumentException("no possible flight connection can be found");
             }
 
-            if (arrival.Any(schedule => schedule.Destination != arrival.First().Destination) ||
-                departure.Any(scheulde => scheulde.Origin != departure.First().Origin)) {
+            if (arrival.Any(schedule => schedule.ArrivalAirport != arrival.First().ArrivalAirport) ||
+                departure.Any(scheulde => scheulde.DepartureAirport != departure.First().DepartureAirport)) {
                 throw new ArgumentException("flight schedules do not have same origin/desitination");
             }
 
-            if (arrival.First().Destination != departure.First().Origin) {
+            if (arrival.First().ArrivalAirport != departure.First().DepartureAirport) {
                 throw new ArgumentException(
                     String.Format("find mismatch arrival/departure flights",
-                        arrival.First().Destination.Code, departure.First().Destination.Code));
+                        arrival.First().ArrivalAirport.Code, departure.First().ArrivalAirport.Code));
             }
 
             ISet<Airport> originAirports = new SortedSet<Airport>(origins);
-            Arrivals = new List<Flight>(arrival.Where(schedule => originAirports.Count == 0 || originAirports.Contains(schedule.Origin))
+            Arrivals = new List<Flight>(arrival.Where(schedule => originAirports.Count == 0 || originAirports.Contains(schedule.DepartureAirport))
                                                                .SelectMany(shedule => shedule.AsEnumerable())
                                                                .OrderBy(flight => flight.DestinationArrivalDateTime));
 
             ISet<Airport> destinationAirports = new SortedSet<Airport>(destinations);
-            Departures = new List<Flight>(departure.Where(schedule => destinationAirports.Count == 0 || destinationAirports.Contains(schedule.Destination))
+            Departures = new List<Flight>(departure.Where(schedule => destinationAirports.Count == 0 || destinationAirports.Contains(schedule.ArrivalAirport))
                                                                            .SelectMany(shedule => shedule.AsEnumerable())
                                                                            .OrderBy(flight => flight.DepartureDateTime));
 

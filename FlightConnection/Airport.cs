@@ -6,10 +6,9 @@ namespace FlightConnection
     {
         public Airport(string code) {
             this.Code = code.Trim();
-        }
-
-        public static explicit operator Airport(string code) {
-            return new Airport(code);
+            if (Code.Length == 0) {
+                throw new ArgumentException(String.Format("cannot accept empty airport code ({0})", code));
+            }
         }
 
         public static bool operator ==(Airport lhs, Airport rhs) {

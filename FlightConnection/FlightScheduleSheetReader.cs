@@ -13,7 +13,7 @@ namespace FlightConnection
             ISheet sheet = workbook.GetSheetAt(0);
 
             var schedules = new List<FlightSchedule>();
-            foreach (IRow row in Enumerable.Range(1, sheet.LastRowNum).Select(index => sheet.GetRow(index))
+            foreach (IRow row in Enumerable.Range(2, sheet.LastRowNum).Select(index => sheet.GetRow(index))
                                                                                                            .TakeWhile(row => row != null)) {
                 FlightSchedule schedule = new FlightSchedule();
                 ((IRowReadable)schedule).ReadFrom(row, 0);

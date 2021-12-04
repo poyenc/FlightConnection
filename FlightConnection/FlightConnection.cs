@@ -7,10 +7,10 @@ namespace FlightConnection
     class FlightConnection : IRowWritable
     {
         public FlightConnection(Flight arrival, Flight departure, AirportDistanceResolver distanceResolver) {
-            if (arrival.Schedule.Destination != departure.Schedule.Origin) {
+            if (arrival.Schedule.ArrivalAirport != departure.Schedule.DepartureAirport) {
                 throw new ArgumentException(
                     String.Format("destination ({0}) of arrival flight and origin ({1}) of departure flight is not same",
-                        arrival.Schedule.Destination, departure.Schedule.Origin));
+                        arrival.Schedule.ArrivalAirport, departure.Schedule.DepartureAirport));
             }
 
             if (departure.DepartureDateTime <= arrival.DestinationArrivalDateTime) {
@@ -50,8 +50,8 @@ namespace FlightConnection
 
         public Distance Distance {
             get {
-                if (DistanceResolver.HasExtraDistance(Arrival.Schedule.Origin, Departure.Schedule.Destination)) {
-                    return DistanceResolver.DistanceOf(Arrival.Schedule.Origin, Departure.Schedule.Destination);
+                if (DistanceResolver.HasExtraDistance(Arrival.Schedule.DepartureAirport, Departure.Schedule.ArrivalAirport)) {
+                    return DistanceResolver.DistanceOf(Arrival.Schedule.DepartureAirport, Departure.Schedule.ArrivalAirport);
                 }
 
                 return DistanceResolver.DistanceOf(Arrival) + DistanceResolver.DistanceOf(Departure);
@@ -65,11 +65,11 @@ namespace FlightConnection
             row.CreateCell(connectionStartColumn).SetCellValue(TransitTime.ToString(@"hh\:mm"));
             row.CreateCell(connectionStartColumn + 1).SetCellValue(TotalTravelTime.ToString(@"hh\:mm"));
             row.CreateCell(connectionStartColumn + 2).SetCellValue(Distance.Kilometer);
-            if (DistanceResolver.HasExtraDistance(Arrival.Schedule.Origin, Departure.Schedule.Destination)) {
+            if (DistanceResolver.HasExtraDistance(Arrival.Schedule.DepartureAirport, Departure.Schedule.ArrivalAirport)) {
                 row.CreateCell(connectionStartColumn + 3).SetCellValue("V");
             }
             row.CreateCell(connectionStartColumn + 4).SetCellValue(DirectTravelTime.ToString(@"hh\:mm"));
-            if (Arrival.Schedule.Origin.Equals(Departure.Schedule.Destination)) {
+            if (Arrival.Schedule.DepartureAirport.Equals(Departure.Schedule.ArrivalAirport)) {
                 row.CreateCell(connectionStartColumn + 5).SetCellValue("V");
             }
 

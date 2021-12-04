@@ -1,19 +1,21 @@
 ﻿using NPOI.SS.UserModel;
 using System;
 using System.Collections.Generic;
-using System.Linq;
 
 namespace FlightConnection
 {
     class Flight : IRowWritable
     {
-        public Flight(FlightSchedule schedule, int dayOffset) {
-
-            if (dayOffset < 0 ||
-                !schedule.OperationDays.Contains(GetDayOfWeek(schedule.FirstDepartureDateTime.DayOfWeek, dayOffset))) {
-                throw new ArgumentOutOfRangeException(String.Format("invalid day offset({0}) for flight", dayOffset));
+        public class Number
+        {
+            public Number(UInt16 number) {
+                this.Value = number;
             }
 
+            public UInt16 Value { get; }
+        }
+
+        public Flight(FlightSchedule schedule, int dayOffset) {
             this.DayOffset = dayOffset;
             this.Schedule = schedule;
         }
@@ -23,6 +25,7 @@ namespace FlightConnection
         }
 
         int IRowWritable.WriteTo(IRow row, IDictionary<string, ICellStyle> styles, int startColumn) {
+            /*
             row.CreateCell(startColumn).SetCellValue(Schedule.Carrier.Name);
             row.CreateCell(startColumn + 1).SetCellValue(Schedule.Number.Value);
             row.CreateCell(startColumn + 2).SetCellValue(Schedule.Origin.Code);
@@ -38,6 +41,7 @@ namespace FlightConnection
             row.CreateCell(startColumn + 12).SetCellValue(Schedule.Equipment.Name);
             row.CreateCell(startColumn + 13).SetCellValue(Schedule.Frequency);
             row.CreateCell(startColumn + 14).SetCellValue(Schedule.Seats);
+            */
 
             return startColumn + 15;
         }
@@ -46,7 +50,7 @@ namespace FlightConnection
 
         public DateTime DepartureDateTime {
             get {
-                return Schedule.FirstDepartureDateTime.AddDays(DayOffset);
+                return Schedule.EffectiveDate.AddDays(DayOffset);
             }
         }
 
@@ -58,7 +62,7 @@ namespace FlightConnection
 
         public DateTime DestinationArrivalDateTime {
             get {
-                return ArrivalDateTime + Schedule.TimeZoneDifference;
+                return ArrivalDateTime + Schedule.ArrivalTimeOffset;
             }
         }
 

@@ -10,69 +10,88 @@ namespace FlightConnection
     {
         public Carrier Carrier { get; private set; }
 
-        public Number Number { get; private set; }
+        public Flight.Number FlightNumber { get; private set; }
 
-        public Airport Origin { get; private set; }
+        public Service.Type ServiceType { get; private set; }
 
-        public Airport Destination { get; private set; }
+        public DateTime EffectiveDate { get; private set; }
 
-        public DateTime FirstDepartureDateTime { get; private set; }
+        public DateTime DiscontinuedDate { get; private set; }
 
-        public TimeSpan Duration { get; private set; }
+        public Airport DepartureAirport { get; private set; }
 
-        public TimeSpan TimeZoneDifference { get; private set; }
+        public Country DepartureCountry { get; private set; }
+
+        public TimeSpan DepartureTime { get; private set; }
+
+        public TimeSpan DepartureTimeOffset { get; private set; }
+
+        public Airport ArrivalAirport { get; private set; }
+
+        public Country ArrivalCountry { get; private set; }
+
+        public TimeSpan ArrivalTime { get; private set; }
+
+        public TimeSpan ArrivalTimeOffset { get; private set; }
+
+        public Aircraft.Code AircraftCode { get; private set; }
+
+        public ThreeWayIndicator ArrivalDayIndicator { get; private set; }
+
+        public UInt16 Stops { get; private set; }
+
+        public ICollection<Airport> StopAirports { get; private set; }
 
         public Distance Distance { get; private set; }
 
-        public int Stops { get; private set; }
+        public TimeSpan Duration { get; private set; }
 
-        public Equipment Equipment { get; private set; }
+        public TimeSpan LayoverTime { get; private set; }
 
-        public int Frequency { get; private set; }
+        public Carrier CodeShareCarrier { get; private set; }
 
-        public int Seats { get; private set; }
+        public TwoWayIndicator CodeShareIndicator { get; private set; }
 
-        public DateTime FirstArrivalDateTime {
-            get { return FirstDepartureDateTime + Duration; }
-        }
+        public TwoWayIndicator WetLeaseIndicator { get; private set; }
 
-        public DateTime FirstDestinationArrivalDateTime {
-            get { return FirstArrivalDateTime + TimeZoneDifference; }
-        }
+        public string CodeShareInfo { get; private set; }
+
+        public string WetLeaseInfo { get; private set; }
+
+        public Frequency Frequency { get; private set; }
+
+        public Frequency WeeklyFrequency { get; private set; }
 
         public OperationDays OperationDays { get; private set; }
 
         void IRowReadable.ReadFrom(IRow row, int startColumn) {
-            Carrier = (Carrier)row.GetCell(startColumn).StringCellValue;
-            Number = (Number)row.GetCell(startColumn + 1).StringCellValue;
-            Origin = (Airport)row.GetCell(startColumn + 2).StringCellValue;
-            Destination = (Airport)row.GetCell(startColumn + 3).StringCellValue;
-            FirstDepartureDateTime = FlightScheduleFieldResolver.ResolveDateTime(
-                row.GetCell(startColumn + 13).StringCellValue, row.GetCell(startColumn + 4).StringCellValue);
-            OperationDays = new OperationDays(row.GetCell(startColumn + 6).StringCellValue, FirstDepartureDateTime.DayOfWeek);
-            if (!OperationDays.Contains(FirstDepartureDateTime.DayOfWeek)) {
-                throw new ArgumentException("operation days is not matched to the flight schedule");
-            }
-
-            Duration = FlightScheduleFieldResolver.ResolveDuration(row.GetCell(startColumn + 7).StringCellValue);
-            Distance = (Distance)Convert.ToInt32(row.GetCell(startColumn + 8).StringCellValue);
-            Stops = Convert.ToInt32(row.GetCell(startColumn + 9).NumericCellValue);
-            Equipment = (Equipment)row.GetCell(startColumn + 10).StringCellValue;
-            Frequency = Convert.ToInt32(row.GetCell(startColumn + 11).NumericCellValue);
-            Seats = Convert.ToInt32(row.GetCell(startColumn + 12).NumericCellValue);
-
-            DateTime referenceArrivalDateTime = FlightScheduleFieldResolver.ResolveDateTime(
-                row.GetCell(startColumn + 13).StringCellValue, row.GetCell(startColumn + 5).StringCellValue);
-            TimeZoneDifference = referenceArrivalDateTime - FirstArrivalDateTime;
-            // adjust time zone different by time zone offset when they are conflict
-            if (AirportTimeZoneResolver.HasTimeZoneOffset(Origin) && AirportTimeZoneResolver.HasTimeZoneOffset(Destination)) {
-                bool isFlightToEast = (0 < AirportTimeZoneResolver.TimeZoneOffset(Destination) - AirportTimeZoneResolver.TimeZoneOffset(Origin));
-                if (TimeZoneDifference.Hours < -10 && isFlightToEast) {
-                    TimeZoneDifference += TimeSpan.FromHours(24);
-                } else if (10 < TimeZoneDifference.Hours && !isFlightToEast) {
-                    TimeZoneDifference -= TimeSpan.FromHours(24);
-                }
-            }
+            Carrier = FlightScheduleFieldResolver.ResolveCarrier(row.GetCell(startColumn + 0));
+            FlightNumber = FlightScheduleFieldResolver.ResolveFlightNumber(row.GetCell(startColumn + 1));
+            ServiceType = FlightScheduleFieldResolver.ResolveServiceType(row.GetCell(startColumn + 2));
+            EffectiveDate = FlightScheduleFieldResolver.ResolveDate(row.GetCell(startColumn + 3));
+            DiscontinuedDate = FlightScheduleFieldResolver.ResolveDate(row.GetCell(startColumn + 4));
+            DepartureAirport = FlightScheduleFieldResolver.ResolveAirport(row.GetCell(startColumn + 12));
+            DepartureCountry = FlightScheduleFieldResolver.ResolveCountry(row.GetCell(startColumn + 15));
+            DepartureTime = FlightScheduleFieldResolver.ResolveTime(row.GetCell(startColumn + 16));
+            DepartureTimeOffset = FlightScheduleFieldResolver.ResolveTimeOffset(row.GetCell(startColumn + 18));
+            ArrivalAirport = FlightScheduleFieldResolver.ResolveAirport(row.GetCell(startColumn + 20));
+            ArrivalCountry = FlightScheduleFieldResolver.ResolveCountry(row.GetCell(startColumn + 23));
+            ArrivalTime = FlightScheduleFieldResolver.ResolveTime(row.GetCell(startColumn + 24));
+            ArrivalTimeOffset = FlightScheduleFieldResolver.ResolveTimeOffset(row.GetCell(startColumn + 26));
+            AircraftCode = FlightScheduleFieldResolver.ResolveAircraftCode(row.GetCell(startColumn + 28));
+            ArrivalDayIndicator = FlightScheduleFieldResolver.ResolveThreeWayIndicator(row.GetCell(startColumn + 33));
+            Stops = FlightScheduleFieldResolver.ResolveStops(row.GetCell(startColumn + 34));
+            StopAirports = FlightScheduleFieldResolver.ResolveAirports(row.GetCell(startColumn + 35)).ToList();
+            Distance = FlightScheduleFieldResolver.ResolveDistance(row.GetCell(startColumn + 40));
+            Duration = FlightScheduleFieldResolver.ResolveDuration(row.GetCell(startColumn + 41));
+            LayoverTime = FlightScheduleFieldResolver.ResolveDuration(row.GetCell(startColumn + 42));
+            CodeShareCarrier = FlightScheduleFieldResolver.ResolveCarrier(row.GetCell(startColumn + 45));
+            CodeShareIndicator = FlightScheduleFieldResolver.ResolveTwoWayIndicator(row.GetCell(startColumn + 46));
+            WetLeaseIndicator = FlightScheduleFieldResolver.ResolveTwoWayIndicator(row.GetCell(startColumn + 47));
+            CodeShareInfo = row.GetCell(startColumn + 48).StringCellValue;
+            WetLeaseInfo = row.GetCell(startColumn + 49).StringCellValue;
+            Frequency = FlightScheduleFieldResolver.ResolveFrequency(row.GetCell(startColumn + 55));
+            WeeklyFrequency = FlightScheduleFieldResolver.ResolveFrequency(row.GetCell(startColumn + 56));
         }
 
         IEnumerator IEnumerable.GetEnumerator() {
@@ -86,7 +105,7 @@ namespace FlightConnection
               OperationDays, OperationDays.Cycle().Skip(1), GetDayStep
             ).Take(OperationDays.Count() - 1);
 
-            bool InSameYear(int dayOffset) => FirstDepartureDateTime.Year == FirstDepartureDateTime.AddDays(dayOffset).Year;
+            bool InSameYear(int dayOffset) => (EffectiveDate + DepartureTime).Year == (EffectiveDate + DepartureTime).AddDays(dayOffset).Year;
 
             yield return new Flight(this, 0);
             foreach (int dayOffset in daySteps.CumulativeSum(0, (sum, daySetp) => sum + daySetp).TakeWhile(InSameYear)) {
