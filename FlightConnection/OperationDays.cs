@@ -1,11 +1,9 @@
-﻿using NPOI.SS.UserModel;
-using System;
+﻿using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace FlightConnection
 {
@@ -21,7 +19,7 @@ namespace FlightConnection
 
             ISet<DayOfWeek> days = new SortedSet<DayOfWeek>();
             foreach (char c in nonSpaceDaysString) {
-                if (!days.Add(ToDayOfWeek(c))) { 
+                if (!days.Add(ToDayOfWeek(c))) {
                     throw new ArgumentException(String.Format("meet duplicated day in operation days string: {0}", daysString));
                 }
             }
@@ -35,11 +33,11 @@ namespace FlightConnection
         }
 
         private static DayOfWeek ToDayOfWeek(char c) {
-            return (DayOfWeek) ((c - '1' + 1) % 7);
+            return (DayOfWeek)((c - '1' + 1) % 7);
         }
 
         IEnumerator IEnumerable.GetEnumerator() {
-            return ((IEnumerable<DayOfWeek>) this).GetEnumerator(); 
+            return ((IEnumerable<DayOfWeek>)this).GetEnumerator();
         }
 
         IEnumerator<DayOfWeek> IEnumerable<DayOfWeek>.GetEnumerator() {

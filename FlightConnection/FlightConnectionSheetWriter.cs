@@ -4,12 +4,10 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FlightConnection
 {
-    class FlightConnectionSheetWriter 
+    class FlightConnectionSheetWriter
     {
         class SheetHeader : IRowWritable
         {
@@ -62,9 +60,9 @@ namespace FlightConnection
                 styles.Add("number", number);
             }
 
-            ((IRowWritable) new SheetHeader()).WriteTo(sheet.CreateRow(0), styles, 0);
+            ((IRowWritable)new SheetHeader()).WriteTo(sheet.CreateRow(0), styles, 0);
             foreach (var (connection, index) in OrderBy(connections, policy).Select((element, index) => (element, index))) {
-                ((IRowWritable) connection).WriteTo(sheet.CreateRow(index + 1), styles, 0);
+                ((IRowWritable)connection).WriteTo(sheet.CreateRow(index + 1), styles, 0);
             }
 
             workbook.Write(stream);

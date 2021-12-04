@@ -3,8 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FlightConnection
 {
@@ -18,7 +16,7 @@ namespace FlightConnection
             foreach (IRow row in Enumerable.Range(1, sheet.LastRowNum).Select(index => sheet.GetRow(index))
                                                                                                            .TakeWhile(row => row != null)) {
                 FlightSchedule schedule = new FlightSchedule();
-                ((IRowReadable) schedule).ReadFrom(row, 0);
+                ((IRowReadable)schedule).ReadFrom(row, 0);
 
                 schedules.Add(schedule);
             }

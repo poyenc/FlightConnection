@@ -2,10 +2,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FlightConnection
 {
@@ -25,7 +22,7 @@ namespace FlightConnection
 
         public TimeSpan TimeZoneDifference { get; private set; }
 
-        public Distance Distance { get; private set; } 
+        public Distance Distance { get; private set; }
 
         public int Stops { get; private set; }
 
@@ -58,9 +55,9 @@ namespace FlightConnection
             }
 
             Duration = FlightScheduleFieldResolver.ResolveDuration(row.GetCell(startColumn + 7).StringCellValue);
-            Distance = (Distance) Convert.ToInt32(row.GetCell(startColumn + 8).StringCellValue);
+            Distance = (Distance)Convert.ToInt32(row.GetCell(startColumn + 8).StringCellValue);
             Stops = Convert.ToInt32(row.GetCell(startColumn + 9).NumericCellValue);
-            Equipment = (Equipment) row.GetCell(startColumn + 10).StringCellValue;
+            Equipment = (Equipment)row.GetCell(startColumn + 10).StringCellValue;
             Frequency = Convert.ToInt32(row.GetCell(startColumn + 11).NumericCellValue);
             Seats = Convert.ToInt32(row.GetCell(startColumn + 12).NumericCellValue);
 
@@ -79,7 +76,7 @@ namespace FlightConnection
         }
 
         IEnumerator IEnumerable.GetEnumerator() {
-            return ((IEnumerable<Flight>) this).GetEnumerator();
+            return ((IEnumerable<Flight>)this).GetEnumerator();
         }
 
         IEnumerator<Flight> IEnumerable<Flight>.GetEnumerator() {

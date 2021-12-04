@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FlightConnection
 {
-    class Distance {
+    class Distance
+    {
         public Distance(int distanceInKilometer) {
             if (distanceInKilometer <= 0) {
                 throw new ArgumentOutOfRangeException("invalid distance value");

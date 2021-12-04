@@ -2,15 +2,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FlightConnection
 {
     class Flight : IRowWritable
     {
         public Flight(FlightSchedule schedule, int dayOffset) {
-         
+
             if (dayOffset < 0 ||
                 !schedule.OperationDays.Contains(GetDayOfWeek(schedule.FirstDepartureDateTime.DayOfWeek, dayOffset))) {
                 throw new ArgumentOutOfRangeException(String.Format("invalid day offset({0}) for flight", dayOffset));
@@ -21,7 +19,7 @@ namespace FlightConnection
         }
 
         private static DayOfWeek GetDayOfWeek(DayOfWeek dayOfWeek, int dayOffset) {
-            return (DayOfWeek)(((int) dayOfWeek + dayOffset % 7) % 7);
+            return (DayOfWeek)(((int)dayOfWeek + dayOffset % 7) % 7);
         }
 
         int IRowWritable.WriteTo(IRow row, IDictionary<string, ICellStyle> styles, int startColumn) {
@@ -52,16 +50,16 @@ namespace FlightConnection
             }
         }
 
-        public DateTime ArrivalDateTime { 
-            get { 
-                return DepartureDateTime + Schedule.Duration; 
-            } 
+        public DateTime ArrivalDateTime {
+            get {
+                return DepartureDateTime + Schedule.Duration;
+            }
         }
 
         public DateTime DestinationArrivalDateTime {
             get {
-                return ArrivalDateTime + Schedule.TimeZoneDifference; 
-            } 
+                return ArrivalDateTime + Schedule.TimeZoneDifference;
+            }
         }
 
         public FlightSchedule Schedule { get; }

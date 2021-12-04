@@ -1,17 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.ComponentModel;
 using System.Data;
-using System.Drawing;
 using System.IO;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace FlightConnection
 {
-    public partial class Form1 : Form, IMessageDisplayer {
+    public partial class Form1 : Form, IMessageDisplayer
+    {
         public Form1() {
             InitializeComponent();
         }
@@ -52,7 +49,7 @@ namespace FlightConnection
                         return textBox4.Text + ".xlsx";
                     }
                 }
-               return textBox4.Text;
+                return textBox4.Text;
             }
         }
 
@@ -97,7 +94,7 @@ namespace FlightConnection
         }
 
         private IMessageDisplayer MessageDisplayer {
-            get { return (IMessageDisplayer) this; }
+            get { return (IMessageDisplayer)this; }
         }
 
         public void Send(string message) {

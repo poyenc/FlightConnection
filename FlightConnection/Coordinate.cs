@@ -1,14 +1,10 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Diagnostics;
-using System.Linq;
-using System.Text;
 using System.Text.RegularExpressions;
-using System.Threading.Tasks;
 
 namespace FlightConnection
 {
-    class Coordinate {
+    class Coordinate
+    {
         public Coordinate(String text) {
             Regex format = new Regex(@"([^\s]*)[\s]*([^\s]*)");
             Match match = format.Match(text.Trim());

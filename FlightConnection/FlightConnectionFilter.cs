@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FlightConnection
 {
-    class FlightConnectionFilter {
+    class FlightConnectionFilter
+    {
         public FlightConnectionFilter(IEnumerable<FlightSchedule> arrival, IEnumerable<FlightSchedule> departure,
                                                     AirportDistanceResolver distanceResolver, IEnumerable<Airport> origins,
                                                     IEnumerable<Airport> destinations) {
@@ -44,7 +43,7 @@ namespace FlightConnection
 
         private AirportDistanceResolver DistanceResolver { get; }
 
-        private IEnumerable<FlightConnection> FilterImpl(IReadOnlyList<Flight> arrivals, IReadOnlyList<Flight> departures, 
+        private IEnumerable<FlightConnection> FilterImpl(IReadOnlyList<Flight> arrivals, IReadOnlyList<Flight> departures,
                                                                                      AirportDistanceResolver distanceResolver, TimeSpan minTransitTime,
                                                                                      TimeSpan maxTransitTime) {
             if (arrivals.Count == 0 || departures.Count == 0) {

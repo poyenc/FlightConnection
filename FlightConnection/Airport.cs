@@ -1,8 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace FlightConnection
 {
@@ -16,7 +12,7 @@ namespace FlightConnection
             return new Airport(code);
         }
 
-        public static bool operator==(Airport lhs, Airport rhs) {
+        public static bool operator ==(Airport lhs, Airport rhs) {
             return lhs.Equals(rhs);
         }
 
@@ -38,12 +34,12 @@ namespace FlightConnection
             return Code.ToString();
         }
 
-        public override bool Equals(object other)  {
+        public override bool Equals(object other) {
             if (other == null || !this.GetType().Equals(other.GetType())) {
                 return false;
             }
 
-            return Equals((Airport) other);
+            return Equals((Airport)other);
         }
 
         public override int GetHashCode() {
