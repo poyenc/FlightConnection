@@ -74,5 +74,13 @@ namespace FlightConnection
         public static Frequency ResolveFrequency(ICell cell) {
             return new Frequency((UInt16)cell.NumericCellValue);
         }
+
+        public static OperationDays ResolveOperationDays(ICell cell, DayOfWeek firstDay) {
+            if (cell.CellType == CellType.Numeric) {
+                return new OperationDays(cell.NumericCellValue.ToString(), firstDay);
+            }
+
+            return new OperationDays(cell.StringCellValue, firstDay);
+        }
     }
 }

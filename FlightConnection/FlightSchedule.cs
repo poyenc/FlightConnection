@@ -90,6 +90,7 @@ namespace FlightConnection
             WetLeaseIndicator = FlightScheduleFieldResolver.ResolveTwoWayIndicator(row.GetCell(startColumn + 47));
             CodeShareInfo = row.GetCell(startColumn + 48).StringCellValue;
             WetLeaseInfo = row.GetCell(startColumn + 49).StringCellValue;
+            OperationDays = FlightScheduleFieldResolver.ResolveOperationDays(row.GetCell(startColumn + 54), EffectiveDate.DayOfWeek);
             Frequency = FlightScheduleFieldResolver.ResolveFrequency(row.GetCell(startColumn + 55));
             WeeklyFrequency = FlightScheduleFieldResolver.ResolveFrequency(row.GetCell(startColumn + 56));
         }

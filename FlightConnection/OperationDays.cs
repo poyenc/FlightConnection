@@ -10,7 +10,7 @@ namespace FlightConnection
     class OperationDays : IEnumerable<DayOfWeek>
     {
         public OperationDays(string daysString, DayOfWeek firstDay) {
-            string nonSpaceDaysString = daysString.Replace(" ", "");
+            string nonSpaceDaysString = String.Concat(daysString.Where(c => !Char.IsWhiteSpace(c)));
 
             Match m = Regex.Match(nonSpaceDaysString, @"[1234567]+");
             if (!m.Success) {
