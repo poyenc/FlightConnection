@@ -102,14 +102,14 @@ namespace FlightConnection
         IEnumerator<Flight> IEnumerable<Flight>.GetEnumerator() {
             int GetDayStep(DayOfWeek prevDay, DayOfWeek nextDay) => ((int)nextDay + 7 - (int)prevDay) % 7;
 
-            var daySteps = Enumerable.Zip(
+            var daySteps = (OperationDays.Count() == 1 ? 7.Yield().Cycle() : Enumerable.Zip(
               OperationDays, OperationDays.Cycle().Skip(1), GetDayStep
-            ).Take(OperationDays.Count() - 1);
+            ).Take(OperationDays.Count()).Cycle());
 
-            bool InSameYear(int dayOffset) => (EffectiveDate + DepartureTime).Year == (EffectiveDate + DepartureTime).AddDays(dayOffset).Year;
+            bool isValid(int dayOffset) => EffectiveDate.AddDays(dayOffset) <= DiscontinuedDate;
 
             yield return new Flight(this, 0);
-            foreach (int dayOffset in daySteps.CumulativeSum(0, (sum, daySetp) => sum + daySetp).TakeWhile(InSameYear)) {
+            foreach (int dayOffset in daySteps.CumulativeSum(0, (sum, daySetp) => sum + daySetp).TakeWhile(isValid)) {
                 yield return new Flight(this, dayOffset);
             }
         }
