@@ -59,5 +59,9 @@ namespace FlightConnection
                 yield return list[index];
             }
         }
+
+        public static IEnumerable<T> Yield<T>(this T item) {
+            yield return item;
+        }
     }
 }
