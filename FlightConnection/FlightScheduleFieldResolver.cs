@@ -75,12 +75,19 @@ namespace FlightConnection
             return new Frequency((UInt16)cell.NumericCellValue);
         }
 
-        public static OperationDays ResolveOperationDays(ICell cell, DayOfWeek firstDay) {
-            if (cell.CellType == CellType.Numeric) {
-                return new OperationDays(cell.NumericCellValue.ToString(), firstDay);
-            }
+        public static OperationDays ResolveOperationDays(IRow row, int startIndex, DayOfWeek firstDay) {
+            char GetWorkdayChar((ICell, int) param) {
+                var (cell, index) = param;
+                char cellChar = (cell.CellType == CellType.String ? cell.StringCellValue : cell.NumericCellValue.ToString()).First();
+                if (cellChar == '0') {
+                    return ' ';
+                }
+                return (char)('0' + index + 1);
+            };
 
-            return new OperationDays(cell.StringCellValue, firstDay);
+            string workdaysString = String.Join("", Enumerable.Range(0, 7).Select(cellOffset => row.GetCell(startIndex + cellOffset)).WithIndex()
+                .Select(GetWorkdayChar));
+            return new OperationDays(workdaysString, firstDay);
         }
     }
 }

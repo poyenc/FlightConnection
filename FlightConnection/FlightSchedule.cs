@@ -14,6 +14,8 @@ namespace FlightConnection
 
         public Service.Type ServiceType { get; private set; }
 
+        public OperationDays OperationDays { get; private set; }
+
         public DateTime EffectiveDate { get; private set; }
 
         public DateTime DiscontinuedDate { get; private set; }
@@ -62,14 +64,13 @@ namespace FlightConnection
 
         public Frequency WeeklyFrequency { get; private set; }
 
-        public OperationDays OperationDays { get; private set; }
-
         void IRowReadable.ReadFrom(IRow row, int startColumn) {
             Carrier = FlightScheduleFieldResolver.ResolveCarrier(row.GetCell(startColumn + 0));
             FlightNumber = FlightScheduleFieldResolver.ResolveFlightNumber(row.GetCell(startColumn + 1));
             ServiceType = FlightScheduleFieldResolver.ResolveServiceType(row.GetCell(startColumn + 2));
             EffectiveDate = FlightScheduleFieldResolver.ResolveDate(row.GetCell(startColumn + 3));
             DiscontinuedDate = FlightScheduleFieldResolver.ResolveDate(row.GetCell(startColumn + 4));
+            OperationDays = FlightScheduleFieldResolver.ResolveOperationDays(row, 5, EffectiveDate.DayOfWeek);
             DepartureAirport = FlightScheduleFieldResolver.ResolveAirport(row.GetCell(startColumn + 12));
             DepartureCountry = FlightScheduleFieldResolver.ResolveCountry(row.GetCell(startColumn + 15));
             DepartureTime = FlightScheduleFieldResolver.ResolveTime(row.GetCell(startColumn + 16));
@@ -90,7 +91,6 @@ namespace FlightConnection
             WetLeaseIndicator = FlightScheduleFieldResolver.ResolveTwoWayIndicator(row.GetCell(startColumn + 47));
             CodeShareInfo = row.GetCell(startColumn + 48).StringCellValue;
             WetLeaseInfo = row.GetCell(startColumn + 49).StringCellValue;
-            OperationDays = FlightScheduleFieldResolver.ResolveOperationDays(row.GetCell(startColumn + 54), EffectiveDate.DayOfWeek);
             Frequency = FlightScheduleFieldResolver.ResolveFrequency(row.GetCell(startColumn + 55));
             WeeklyFrequency = FlightScheduleFieldResolver.ResolveFrequency(row.GetCell(startColumn + 56));
         }
