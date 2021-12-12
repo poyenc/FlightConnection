@@ -28,7 +28,10 @@ namespace FlightConnection
         }
 
         public static DateTime ResolveDate(ICell cell) {
-            return DateTime.ParseExact(cell.StringCellValue, "dd/MM/yyyy", null);
+            if (cell.CellType == CellType.String) {
+                return DateTime.ParseExact(cell.StringCellValue, "dd/MM/yyyy", null);
+            }
+            return cell.DateCellValue.Date;
         }
 
         public static TimeSpan ResolveTime(ICell cell) {

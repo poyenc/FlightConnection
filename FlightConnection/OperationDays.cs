@@ -1,4 +1,5 @@
-﻿using System;
+﻿using NPOI.SS.UserModel;
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,7 +8,7 @@ using System.Text.RegularExpressions;
 
 namespace FlightConnection
 {
-    class OperationDays : IEnumerable<DayOfWeek>
+    class OperationDays : IEnumerable<DayOfWeek>, IRowWritable
     {
         public OperationDays(string daysString, DayOfWeek firstDay) {
             string nonSpaceDaysString = String.Concat(daysString.Where(c => !Char.IsWhiteSpace(c)));
@@ -58,6 +59,23 @@ namespace FlightConnection
             }
 
             return builder.ToString().Trim();
+        }
+
+        public int WriteTo(IRow row, IDictionary<string, ICellStyle> styles, int startColumn) {
+            ISet<DayOfWeek> daysSet = new HashSet<DayOfWeek>(Days);
+            char GetDayOfWeekChar(DayOfWeek dayOfWeek) {
+                return (char)('0' + Convert.ToInt32(daysSet.Contains(dayOfWeek)));
+            };
+
+            row.CreateCell(startColumn + 0).SetCellValue(GetDayOfWeekChar(DayOfWeek.Monday).ToString());
+            row.CreateCell(startColumn + 1).SetCellValue(GetDayOfWeekChar(DayOfWeek.Tuesday).ToString());
+            row.CreateCell(startColumn + 2).SetCellValue(GetDayOfWeekChar(DayOfWeek.Wednesday).ToString());
+            row.CreateCell(startColumn + 3).SetCellValue(GetDayOfWeekChar(DayOfWeek.Thursday).ToString());
+            row.CreateCell(startColumn + 4).SetCellValue(GetDayOfWeekChar(DayOfWeek.Friday).ToString());
+            row.CreateCell(startColumn + 5).SetCellValue(GetDayOfWeekChar(DayOfWeek.Saturday).ToString());
+            row.CreateCell(startColumn + 6).SetCellValue(GetDayOfWeekChar(DayOfWeek.Sunday).ToString());
+
+            return startColumn + 7;
         }
     }
 }

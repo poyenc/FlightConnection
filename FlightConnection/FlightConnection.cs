@@ -13,10 +13,10 @@ namespace FlightConnection
                         arrival.Schedule.ArrivalAirport, departure.Schedule.DepartureAirport));
             }
 
-            if (departure.DepartureDateTime <= arrival.DestinationArrivalDateTime) {
+            if (departure.DepartureDateTime <= arrival.DepartureDateTime) {
                 throw new ArgumentException(
                     String.Format("invalid arrival time ({0}) & departure time ({1}) for flight connection",
-                        arrival.DestinationArrivalDateTime, departure.DepartureDateTime));
+                        arrival.DepartureLocalDateTime, departure.ArrivalLocalDateTime));
             }
 
             Arrival = arrival;
@@ -32,7 +32,7 @@ namespace FlightConnection
 
         public TimeSpan TransitTime {
             get {
-                return Departure.DepartureDateTime - Arrival.DestinationArrivalDateTime;
+                return Departure.DepartureDateTime - Arrival.ArrivalDateTime;
             }
         }
 

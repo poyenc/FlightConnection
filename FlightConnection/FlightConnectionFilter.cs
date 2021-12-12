@@ -27,7 +27,7 @@ namespace FlightConnection
             ISet<Airport> originAirports = new SortedSet<Airport>(origins);
             Arrivals = new List<Flight>(arrival.Where(schedule => originAirports.Count == 0 || originAirports.Contains(schedule.DepartureAirport))
                                                                .SelectMany(shedule => shedule.AsEnumerable())
-                                                               .OrderBy(flight => flight.DestinationArrivalDateTime));
+                                                               .OrderBy(flight => flight.ArrivalDateTime));
 
             ISet<Airport> destinationAirports = new SortedSet<Airport>(destinations);
             Departures = new List<Flight>(departure.Where(schedule => destinationAirports.Count == 0 || destinationAirports.Contains(schedule.ArrivalAirport))
@@ -52,15 +52,15 @@ namespace FlightConnection
 
             int iDeparture = 0;
             foreach (Flight arrival in arrivals) {
-                bool Valid(Flight departure) => arrival.DestinationArrivalDateTime < departure.DepartureDateTime;
+                bool Valid(Flight departure) => arrival.ArrivalDateTime < departure.DepartureDateTime;
                 iDeparture = departures.FindIndex(iDeparture, Valid);
                 if (iDeparture < 0) {
                     yield break;
                 }
 
                 bool Connectable(Flight departure) {
-                    var transitTime = departure.DepartureDateTime - arrival.DestinationArrivalDateTime;
-                    return minTransitTime <= transitTime && transitTime <= maxTransitTime;
+                    var transitTime = departure.DepartureDateTime - arrival.ArrivalDateTime;
+                    return minTransitTime <= transitTime && transitTime <= minTransitTime;
                 };
                 foreach (Flight departure in departures.From(iDeparture).TakeWhile(Connectable)) {
                     yield return new FlightConnection(arrival, departure, distanceResolver);

@@ -12,19 +12,15 @@ namespace FlightConnection
         class SheetHeader : IRowWritable
         {
             int IRowWritable.WriteTo(IRow row, IDictionary<string, ICellStyle> styles, int startColumn) {
-                var flightCells = new string[] { "航空公司", "航班號", "出發機場", "到達機場", "出發日期", "出發時間",
-                                                             "到達日期", "到達時間", "營運日期", "飛行時間", "距離(公里)", "中轉數量",
-                                                             "機型", "班次", "座位數" };
-                foreach (var (flightCell, index) in flightCells.Repeat(2).Select((element, index) => (element, index))) {
-                    row.CreateCell(startColumn + index).SetCellValue(flightCell);
-                }
+                var secondFlightStartColumn = new Flight.Header().WriteTo(row, styles, startColumn);
+                var connectStartColumn = new Flight.Header().WriteTo(row, styles, secondFlightStartColumn);
 
                 var connectionCells = new string[] { "轉機時間", "總旅行時間", "總距離", "總距離資料判斷", "DDT", "OOSAME", "RF", "QCI" };
                 foreach (var (connectionCell, index) in connectionCells.Select((element, index) => (element, index))) {
-                    row.CreateCell(startColumn + 2 * flightCells.Count() + index).SetCellValue(connectionCell);
+                    row.CreateCell(connectStartColumn + index).SetCellValue(connectionCell);
                 }
 
-                return startColumn + 2 * flightCells.Count() + connectionCells.Count();
+                return (connectStartColumn - startColumn) + connectionCells.Count();
             }
         }
 
