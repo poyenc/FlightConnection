@@ -20,7 +20,7 @@ namespace FlightConnection
         {
             public int WriteTo(IRow row, IDictionary<string, ICellStyle> styles, int startColumn) {
                 var cells = new string[] {
-                    "carrier", "flightnumber",    "serviceType", "effectiveDate",   "discontinuedDate",
+                    "carrier", "flightnumber",    "serviceType", "effectiveDate",   "discontinuedDate", "departureDate",
                     "day1",    "day2",    "day3",    "day4",    "day5",    "day6",    "day7",   "departureAirport",
                     "departureCountry",   "departureTimePub", "departureUTCVariance", "arrivalAirport", "arrivalCountry", "arrivalTimePub",
                     "arrivalUTCVariance", "subAircraftCode", "flightArrivalDayIndicator", "stops",  "stopCodes", "flightDistance",    "elapsedTime", "layoverTime",
@@ -45,32 +45,33 @@ namespace FlightConnection
             row.CreateCell(startColumn + 2).SetCellValue(Schedule.ServiceType.Value);
             row.CreateCell(startColumn + 3).SetCellValue(Schedule.EffectiveDate.ToString("dd/MM/yyyy"));
             row.CreateCell(startColumn + 4).SetCellValue(Schedule.DiscontinuedDate.ToString("dd/MM/yyyy"));
-            Schedule.OperationDays.WriteTo(row, styles, startColumn + 5);
-            row.CreateCell(startColumn + 12).SetCellValue(Schedule.DepartureAirport.Code);
-            row.CreateCell(startColumn + 13).SetCellValue(Schedule.DepartureCountry.Name);
-            row.CreateCell(startColumn + 14).SetCellValue(Schedule.DepartureTime.ToString(@"hh\:mm\:ss"));
-            row.CreateCell(startColumn + 15).SetCellValue(Schedule.DepartureTimeOffset.Hours * 100);
-            row.CreateCell(startColumn + 16).SetCellValue(Schedule.ArrivalAirport.Code);
-            row.CreateCell(startColumn + 17).SetCellValue(Schedule.ArrivalCountry.Name);
-            row.CreateCell(startColumn + 18).SetCellValue(Schedule.ArrivalTime.ToString(@"hh\:mm\:ss"));
-            row.CreateCell(startColumn + 19).SetCellValue(Schedule.ArrivalTimeOffset.Hours * 100);
-            row.CreateCell(startColumn + 20).SetCellValue(Schedule.AircraftCode.Value);
-            row.CreateCell(startColumn + 21).SetCellValue(Schedule.ArrivalDayIndicator.Value);
-            row.CreateCell(startColumn + 22).SetCellValue(Schedule.Stops);
-            row.CreateCell(startColumn + 23).SetCellValue(String.Join("!", Enumerable.Select(Schedule.StopAirports, (Airport airport) => airport.Code).ToArray()));
-            row.CreateCell(startColumn + 24).SetCellValue(Schedule.Distance.Kilometer);
-            row.CreateCell(startColumn + 25).SetCellValue(Schedule.Duration.Minutes);
-            row.CreateCell(startColumn + 26).SetCellValue(Schedule.LayoverTime.Minutes);
-            row.CreateCell(startColumn + 27).SetCellValue(Schedule.CodeShareCarrier != null ? Schedule.CodeShareCarrier.Name : String.Empty);
-            row.CreateCell(startColumn + 28).SetCellValue(Schedule.CodeShareIndicator.Value);
-            row.CreateCell(startColumn + 29).SetCellValue(Schedule.WetLeaseIndicator.Value);
-            row.CreateCell(startColumn + 30).SetCellValue(Schedule.CodeShareInfo);
-            row.CreateCell(startColumn + 31).SetCellValue(Schedule.WetLeaseInfo);
-            row.CreateCell(startColumn + 32).SetCellValue(Schedule.OperationDays.ToString());
-            row.CreateCell(startColumn + 33).SetCellValue(Schedule.Frequency.Value);
-            row.CreateCell(startColumn + 34).SetCellValue(Schedule.WeeklyFrequency.Value);
+            row.CreateCell(startColumn + 5).SetCellValue(DepartureLocalDateTime.Date.ToString("dd/MM/yyyy"));
+            Schedule.OperationDays.WriteTo(row, styles, startColumn + 6);
+            row.CreateCell(startColumn + 13).SetCellValue(Schedule.DepartureAirport.Code);
+            row.CreateCell(startColumn + 14).SetCellValue(Schedule.DepartureCountry.Name);
+            row.CreateCell(startColumn + 15).SetCellValue(Schedule.DepartureTime.ToString(@"hh\:mm\:ss"));
+            row.CreateCell(startColumn + 16).SetCellValue(Schedule.DepartureTimeOffset.Hours * 100);
+            row.CreateCell(startColumn + 17).SetCellValue(Schedule.ArrivalAirport.Code);
+            row.CreateCell(startColumn + 18).SetCellValue(Schedule.ArrivalCountry.Name);
+            row.CreateCell(startColumn + 19).SetCellValue(Schedule.ArrivalTime.ToString(@"hh\:mm\:ss"));
+            row.CreateCell(startColumn + 20).SetCellValue(Schedule.ArrivalTimeOffset.Hours * 100);
+            row.CreateCell(startColumn + 21).SetCellValue(Schedule.AircraftCode.Value);
+            row.CreateCell(startColumn + 22).SetCellValue(Schedule.ArrivalDayIndicator.Value);
+            row.CreateCell(startColumn + 23).SetCellValue(Schedule.Stops);
+            row.CreateCell(startColumn + 24).SetCellValue(String.Join("!", Enumerable.Select(Schedule.StopAirports, (Airport airport) => airport.Code).ToArray()));
+            row.CreateCell(startColumn + 25).SetCellValue(Schedule.Distance.Kilometer);
+            row.CreateCell(startColumn + 26).SetCellValue(Schedule.Duration.Minutes);
+            row.CreateCell(startColumn + 27).SetCellValue(Schedule.LayoverTime.Minutes);
+            row.CreateCell(startColumn + 28).SetCellValue(Schedule.CodeShareCarrier != null ? Schedule.CodeShareCarrier.Name : String.Empty);
+            row.CreateCell(startColumn + 29).SetCellValue(Schedule.CodeShareIndicator.Value);
+            row.CreateCell(startColumn + 30).SetCellValue(Schedule.WetLeaseIndicator.Value);
+            row.CreateCell(startColumn + 31).SetCellValue(Schedule.CodeShareInfo);
+            row.CreateCell(startColumn + 32).SetCellValue(Schedule.WetLeaseInfo);
+            row.CreateCell(startColumn + 33).SetCellValue(Schedule.OperationDays.ToString());
+            row.CreateCell(startColumn + 34).SetCellValue(Schedule.Frequency.Value);
+            row.CreateCell(startColumn + 35).SetCellValue(Schedule.WeeklyFrequency.Value);
 
-            return startColumn + 35;
+            return startColumn + 36;
         }
 
         public int DayOffset { get; }

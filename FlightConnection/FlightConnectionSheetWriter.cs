@@ -12,8 +12,8 @@ namespace FlightConnection
         class SheetHeader : IRowWritable
         {
             int IRowWritable.WriteTo(IRow row, IDictionary<string, ICellStyle> styles, int startColumn) {
-                var secondFlightStartColumn = new Flight.Header().WriteTo(row, styles, startColumn);
-                var connectStartColumn = new Flight.Header().WriteTo(row, styles, secondFlightStartColumn);
+                var departureFlightStartColumn = new Flight.Header().WriteTo(row, styles, startColumn);
+                var connectStartColumn = new Flight.Header().WriteTo(row, styles, departureFlightStartColumn);
 
                 var connectionCells = new string[] { "轉機時間", "總旅行時間", "總距離", "總距離資料判斷", "DDT", "OOSAME", "RF", "QCI" };
                 foreach (var (connectionCell, index) in connectionCells.Select((element, index) => (element, index))) {
