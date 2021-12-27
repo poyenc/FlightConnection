@@ -8,7 +8,7 @@ namespace FlightConnection
     class FlightScheduleFieldResolver
     {
         public static Carrier ResolveCarrier(ICell cell) {
-            return (Carrier)cell.StringCellValue;
+            return cell != null ? (Carrier)cell.StringCellValue : null;
         }
 
         public static Airport ResolveAirport(ICell cell) {
@@ -43,6 +43,10 @@ namespace FlightConnection
         }
 
         public static IEnumerable<Airport> ResolveAirports(ICell cell) {
+            if (cell == null) {
+                return Enumerable.Empty<Airport>();
+            }
+
             return cell.StringCellValue.Split('!').Where(airportString => 0 < airportString.Length).Select(airportString => new Airport(airportString));
         }
 
@@ -76,6 +80,10 @@ namespace FlightConnection
 
         public static Frequency ResolveFrequency(ICell cell) {
             return new Frequency((UInt16)cell.NumericCellValue);
+        }
+
+        public static String ResolveInfo(ICell cell) {
+            return cell != null ? cell.StringCellValue : String.Empty;
         }
 
         public static OperationDays ResolveOperationDays(IRow row, int startIndex, DayOfWeek firstDay) {

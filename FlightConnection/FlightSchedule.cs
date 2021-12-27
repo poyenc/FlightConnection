@@ -89,8 +89,8 @@ namespace FlightConnection
             CodeShareCarrier = FlightScheduleFieldResolver.ResolveCarrier(row.GetCell(startColumn + 45));
             CodeShareIndicator = FlightScheduleFieldResolver.ResolveTwoWayIndicator(row.GetCell(startColumn + 46));
             WetLeaseIndicator = FlightScheduleFieldResolver.ResolveTwoWayIndicator(row.GetCell(startColumn + 47));
-            CodeShareInfo = row.GetCell(startColumn + 48).StringCellValue;
-            WetLeaseInfo = row.GetCell(startColumn + 49).StringCellValue;
+            CodeShareInfo = FlightScheduleFieldResolver.ResolveInfo(row.GetCell(startColumn + 48));
+            WetLeaseInfo = FlightScheduleFieldResolver.ResolveInfo(row.GetCell(startColumn + 49));
             Frequency = FlightScheduleFieldResolver.ResolveFrequency(row.GetCell(startColumn + 55));
             WeeklyFrequency = FlightScheduleFieldResolver.ResolveFrequency(row.GetCell(startColumn + 56));
         }
