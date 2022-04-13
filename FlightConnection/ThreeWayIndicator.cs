@@ -7,7 +7,7 @@ namespace FlightConnection
     {
         public ThreeWayIndicator(Int16 indicator) {
             Value = indicator;
-            if (!new int[] { -1, 0, 1 }.Contains(Value)) {
+            if (!(Value == -1 || 0 <= Value)) {
                 throw new ArgumentException(String.Format("cannot convert {0} to the 3-way indicator", indicator));
             }
         }
