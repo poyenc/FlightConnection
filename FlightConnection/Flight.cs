@@ -43,9 +43,9 @@ namespace FlightConnection
             row.CreateCell(startColumn).SetCellValue(Schedule.Carrier.Name);
             row.CreateCell(startColumn + 1).SetCellValue(Schedule.FlightNumber.Value);
             row.CreateCell(startColumn + 2).SetCellValue(Schedule.ServiceType.Value);
-            row.CreateCell(startColumn + 3).SetCellValue(Schedule.EffectiveDate.ToString("dd/MM/yyyy"));
-            row.CreateCell(startColumn + 4).SetCellValue(Schedule.DiscontinuedDate.ToString("dd/MM/yyyy"));
-            row.CreateCell(startColumn + 5).SetCellValue(DepartureLocalDateTime.Date.ToString("dd/MM/yyyy"));
+            row.CreateCell(startColumn + 3).SetCellValue(Schedule.EffectiveDate.ToString("yyyy/MM/dd"));
+            row.CreateCell(startColumn + 4).SetCellValue(Schedule.DiscontinuedDate.ToString("yyyy/MM/dd"));
+            row.CreateCell(startColumn + 5).SetCellValue(DepartureLocalDateTime.Date.ToString("yyyy/MM/dd"));
             Schedule.OperationDays.WriteTo(row, styles, startColumn + 6);
             row.CreateCell(startColumn + 13).SetCellValue(Schedule.DepartureAirport.Code);
             row.CreateCell(startColumn + 14).SetCellValue(Schedule.DepartureCountry.Name);
