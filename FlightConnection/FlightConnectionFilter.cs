@@ -60,7 +60,7 @@ namespace FlightConnection
 
                 bool Connectable(Flight departure) {
                     var transitTime = departure.DepartureDateTime - arrival.ArrivalDateTime;
-                    return minTransitTime <= transitTime && transitTime <= minTransitTime;
+                    return minTransitTime <= transitTime && transitTime <= maxTransitTime;
                 };
                 foreach (Flight departure in departures.From(iDeparture).TakeWhile(Connectable)) {
                     yield return new FlightConnection(arrival, departure, distanceResolver);
