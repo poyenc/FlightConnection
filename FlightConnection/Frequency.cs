@@ -6,7 +6,7 @@ namespace FlightConnection
     {
         public Frequency(UInt16 frequency) {
             this.Value = frequency;
-            if (5 * 365 < Value) {
+            if (10 * 365 < Value) {
                 throw new ArgumentException(String.Format("frequency value ({0}) is too large", frequency));
             }
         }
