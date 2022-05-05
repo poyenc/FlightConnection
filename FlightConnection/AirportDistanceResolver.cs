@@ -16,9 +16,14 @@ namespace FlightConnection
                 ISheet sheet = workbook.GetSheetAt(0);
 
                 foreach (IRow row in Enumerable.Range(1, sheet.LastRowNum).Select(index => sheet.GetRow(index))
-                                                                                                               .TakeWhile(row => row != null && row.Count() == 3)) {
+                                                                                                               .TakeWhile(row => row != null && 3 <= row.Count())) {
                     var from = FlightScheduleFieldResolver.ResolveAirport(row.GetCell(0));
                     var to = FlightScheduleFieldResolver.ResolveAirport(row.GetCell(1));
+
+                    if (from.Equals(to)) {
+                        continue;
+                    }
+
                     var distance = (Distance)Convert.ToInt32(row.GetCell(2).NumericCellValue);
 
                     var key = GetKey(from, to);
@@ -26,7 +31,8 @@ namespace FlightConnection
                         extraDistances.Add(key, distance);
                     }
                 }
-            } catch (Exception) {
+            } catch (Exception e) {
+                throw new InvalidDataException(String.Format("error occur while reading file: {0}, reason: {1}", filePath, e.Message));
             }
 
             ExtraDistances = extraDistances;
